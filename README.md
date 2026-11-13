@@ -110,6 +110,16 @@ O site mostra uma **estimativa de custo** antes de você clicar em gerar.
 
 ---
 
+## Códigos de erro mais comuns da fal.ai
+
+| Mensagem | O que fazer |
+| --- | --- |
+| `Duration limit depends on character_orientation` | Vídeo com mais de 30 s (ou mais de 10 s com "seguir imagem"). O site já corta automaticamente — se aparecer, envie um vídeo menor. |
+| `image_url` / `video_url` inválidos | O upload não terminou. Gere de novo e aguarde a barra de progresso chegar a 100%. |
+| `file too large` | Acima de 200 MB. Comprima o vídeo (o limite dos modelos é 200 MB; recomendado ≤ 720p). |
+| `No person detected` / rosto não encontrado | Use uma imagem com uma pessoa de corpo inteiro ou meio corpo, rosto visível e sem oclusão. |
+| `IN_QUEUE` por muitos minutos | Fila do modelo cheia em horário de pico. O progresso fica salvo em `?job=...`; pode fechar a página e voltar. |
+
 ## Rodar no seu computador (opcional)
 
 ```bash
