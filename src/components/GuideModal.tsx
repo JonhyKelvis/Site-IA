@@ -11,7 +11,7 @@ export function GuideModal({ open, onClose }: { open: boolean; onClose: () => vo
             <h2 className="text-lg font-bold text-white">Como funciona o MotionLab</h2>
             <p className="mt-1 text-sm text-zinc-400">Três passos para transformar sua imagem em vídeo.</p>
           </div>
-          <button onClick={onClose} className="btn-ghost !px-2 !py-2" aria-label="Fechar">
+          <button onClick={onClose} className="btn-ghost px-2! py-2!" aria-label="Fechar">
             <IconClose className="h-4 w-4" />
           </button>
         </div>

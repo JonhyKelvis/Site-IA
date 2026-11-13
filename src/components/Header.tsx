@@ -17,14 +17,14 @@ export function Header({ onOpenGuide }: { onOpenGuide: () => void }) {
         </div>
 
         <nav className="flex items-center gap-2">
-          <button onClick={onOpenGuide} className="btn-ghost !py-2 text-xs sm:text-sm">
+          <button onClick={onOpenGuide} className="btn-ghost py-2! text-xs sm:text-sm">
             Como funciona
           </button>
           <a
             href="https://github.com/JonhyKelvis/Site-IA"
             target="_blank"
             rel="noreferrer"
-            className="btn-ghost !px-2.5 !py-2"
+            className="btn-ghost px-2.5! py-2!"
             aria-label="Repositório no GitHub"
           >
             <IconGithub className="h-4 w-4" />

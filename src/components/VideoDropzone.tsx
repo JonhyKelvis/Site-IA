@@ -64,7 +64,7 @@ export function VideoDropzone({
         </div>
 
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-white/8 px-3 py-2.5">
-          <span className="chip !border-emerald-400/30 !bg-emerald-400/10 !text-emerald-200">
+          <span className="chip border-emerald-400/30! bg-emerald-400/10! text-emerald-200!">
             <IconFilm className="h-3.5 w-3.5" />
             {formatClock(info.duration)}
           </span>
