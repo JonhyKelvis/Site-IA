@@ -76,12 +76,16 @@ export default function App() {
   const [needsCode, setNeedsCode] = useState(false);
   const [models, setModels] = useState<ModelInfo[]>(FALLBACK_MODELS);
 
+  /** Não recarrega a sessão quando a pessoa volta ao site (evita piscar o login). */
+  const refetchOnReturnRef = useRef(true);
+
   const loadSession = useCallback(async () => {
     setSessionLoading(true);
     try {
       const info = await fetchSession();
       setSession(info);
       setNeedsCode(Boolean(info.needCode));
+      if (!info.needCode) refetchOnReturnRef.current = Boolean(info.accessRequired);
       if (info.models.length) setModels(info.models);
     } catch {
       setSession({ accessRequired: false, needCode: false, models: FALLBACK_MODELS });
@@ -92,6 +96,14 @@ export default function App() {
 
   useEffect(() => {
     void loadSession();
+  }, [loadSession]);
+
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === "visible" && refetchOnReturnRef.current) void loadSession();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
   }, [loadSession]);
 
   /* -------------------------------------------------------------- */
