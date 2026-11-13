@@ -126,6 +126,7 @@ export default function App() {
   const [refine, setRefine] = useState(false);
   const [customPrompt, setCustomPrompt] = useState("");
   const [resolution, setResolution] = useState<"720p" | "480p">("720p");
+  const [fit, setFit] = useState<"contain" | "cover">("contain");
 
   const model = useMemo(
     () => models.find((item) => item.id === modelId) ?? models[0] ?? FALLBACK_MODELS[0],
@@ -354,6 +355,7 @@ export default function App() {
           ratio: effectiveRatio,
           keepAudio: keepSound && !isWan,
           maxDuration: needsTrim ? effectiveMax : undefined,
+          fit,
           onProgress: (percent) => {
             setProgressPercent(percent);
             setProgressDetail(`${percent}% — feito no seu navegador`);
@@ -448,7 +450,7 @@ export default function App() {
           {/* hero */}
           <section className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <span className="chip mb-3 !border-violet-400/30 !bg-violet-500/10 !text-violet-200">
+              <span className="chip mb-3 border-violet-400/30! bg-violet-500/10! text-violet-200!">
                 <IconBolt className="h-3.5 w-3.5" />
                 Kling 3.0 Motion Control · até {Math.max(...models.map((item) => item.maxSeconds))}s
               </span>
@@ -485,7 +487,7 @@ export default function App() {
                   description="O vídeo que tem o movimento que você quer copiar (dança, fala, gestos, câmera)."
                   right={
                     videoInfo ? (
-                      <span className="chip !border-emerald-400/30 !bg-emerald-400/10 !text-emerald-200">
+                      <span className="chip border-emerald-400/30! bg-emerald-400/10! text-emerald-200!">
                         <IconCheck className="h-3.5 w-3.5" /> pronto
                       </span>
                     ) : undefined
@@ -517,7 +519,7 @@ export default function App() {
                   description="O personagem que vai aparecer no vídeo. Rosto visível, corpo inteiro ou meio corpo."
                   right={
                     imageFile ? (
-                      <span className="chip !border-emerald-400/30 !bg-emerald-400/10 !text-emerald-200">
+                      <span className="chip border-emerald-400/30! bg-emerald-400/10! text-emerald-200!">
                         <IconCheck className="h-3.5 w-3.5" /> pronta
                       </span>
                     ) : undefined
@@ -542,6 +544,21 @@ export default function App() {
                   effectiveRatio={effectiveRatio}
                   sourceRatio={videoInfo?.aspectRatio ?? null}
                 />
+
+                {aspect !== "original" && (
+                  <div className="mt-4">
+                    <span className="label">Como encaixar o vídeo na proporção</span>
+                    <Segmented
+                      value={fit}
+                      onChange={setFit}
+                      options={[
+                        { id: "contain", label: "Mostrar tudo", hint: "mantém o corpo inteiro (pode ter barras)" },
+                        { id: "cover", label: "Preencher", hint: "sem barras, recorta as bordas" },
+                      ]}
+                      columns={2}
+                    />
+                  </div>
+                )}
 
                 <div className="mt-5">
                   <span className="label">Modelo</span>
@@ -589,7 +606,12 @@ export default function App() {
                       value={isWan ? "off" : keepSound ? "on" : "off"}
                       onChange={(value) => setKeepSound(value === "on")}
                       options={[
-                        { id: "on", label: "Manter áudio", hint: "som original da referência" },
+                        {
+                          id: "on",
+                          label: "Manter áudio",
+                          hint: isWan ? "indisponível neste modelo" : "som original da referência",
+                          disabled: isWan,
+                        },
                         { id: "off", label: "Sem áudio", hint: "vídeo silencioso" },
                       ]}
                       columns={2}
@@ -657,7 +679,7 @@ export default function App() {
               <div className="card p-4">
                 <div className="mb-3 flex items-center justify-between">
                   <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Prévia do quadro</p>
-                  <span className="chip !px-2 !py-0.5 !text-[10px]">{aspect === "original" ? "original" : aspect}</span>
+                  <span className="chip px-2! py-0.5! text-[10px]!">{aspect === "original" ? "original" : aspect}</span>
                 </div>
 
                 <div className="grid place-items-center rounded-2xl border border-white/10 bg-black/50 p-3">
@@ -752,7 +774,7 @@ export default function App() {
                     <p className="text-xs font-semibold uppercase tracking-wider text-emerald-300">
                       Resultado
                     </p>
-                    <span className="chip !border-emerald-400/30 !bg-emerald-400/10 !text-emerald-200">
+                    <span className="chip border-emerald-400/30! bg-emerald-400/10! text-emerald-200!">
                       pronto
                     </span>
                   </div>

@@ -76,7 +76,7 @@ export function Segmented<T extends string>({
   onChange,
   columns,
 }: {
-  options: { id: T; label: string; hint?: string; sub?: string }[];
+  options: { id: T; label: string; hint?: string; sub?: string; disabled?: boolean }[];
   value: T;
   onChange: (value: T) => void;
   columns?: number;
@@ -88,12 +88,16 @@ export function Segmented<T extends string>({
     >
       {options.map((option) => {
         const active = option.id === value;
+        const disabled = Boolean(option.disabled);
         return (
           <button
             key={option.id}
             type="button"
+            disabled={disabled}
             onClick={() => onChange(option.id)}
             className={`group relative rounded-2xl border p-3 text-left transition ${
+              disabled ? "cursor-not-allowed opacity-40" : ""
+            } ${
               active
                 ? "border-violet-400/60 bg-violet-500/15 shadow-[0_0_0_1px_rgba(167,139,250,0.5),0_18px_40px_-24px_rgba(139,92,246,0.9)]"
                 : "border-white/10 bg-white/[0.03] hover:border-white/25 hover:bg-white/[0.06]"

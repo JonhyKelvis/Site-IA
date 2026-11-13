@@ -203,10 +203,12 @@ export async function renderVideo(
     keepAudio: boolean;
     /** corta o vídeo neste instante (ex.: limite de 30s do modelo) */
     maxDuration?: number;
+    /** "contain" preserva o corpo inteiro (barras) · "cover" preenche (recorta) */
+    fit?: "cover" | "contain";
     onProgress: (percent: number) => void;
   },
 ): Promise<{ blob: Blob; extension: string } | null> {
-  const { ratio, keepAudio, maxDuration, onProgress } = options;
+  const { ratio, keepAudio, maxDuration, fit = "cover", onProgress } = options;
   if (typeof MediaRecorder === "undefined") return null;
   const preferred = ["video/mp4;codecs=avc1", "video/mp4", "video/webm;codecs=vp9", "video/webm"];
   const mimeType = preferred.find((type) => MediaRecorder.isTypeSupported(type));
@@ -263,7 +265,10 @@ export async function renderVideo(
       const draw = () => {
         const vw = video.videoWidth || 720;
         const vh = video.videoHeight || 1280;
-        const scale = Math.max(width / vw, height / vh);
+        const scale =
+          fit === "contain"
+            ? Math.min(width / vw, height / vh)
+            : Math.max(width / vw, height / vh);
         const drawW = vw * scale;
         const drawH = vh * scale;
         ctx.fillStyle = "#000";
